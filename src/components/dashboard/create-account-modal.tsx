@@ -37,7 +37,7 @@ const CreateAccountModal = () => {
             <Input
               id="name"
               defaultValue={session.data?.user?.walletAddress}
-              className="col-span-3 border border-gray-600"
+              className="col-span-3 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-1">
