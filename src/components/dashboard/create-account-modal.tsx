@@ -1,21 +1,21 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Users } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { User, Users } from "lucide-react";
+//import { useSession } from "next-auth/react";
 
-const CreateAccountModal = () => {
-  const session = useSession();
+const CreateAccountModal = ({ address }: { address: string }) => {
+  // const session = useSession();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,36 +29,37 @@ const CreateAccountModal = () => {
           <DialogTitle />
           <DialogDescription />
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right text-primary/50">
-              Wallet Address
-            </Label>
+        <div className="grid gap-6">
+          <div className="grid gap-2">
+            <Label className="">Wallet Address</Label>
             <Input
-              id="name"
-              defaultValue={session.data?.user?.walletAddress}
-              className="col-span-3 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+              className="bg-sky-50 text-card"
+              required
+              readOnly
+              defaultValue={address}
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-1">
-            <Label htmlFor="username" className="text-right text-primary/50">
-              Username
-            </Label>
-            <Input
-              placeholder="Username/Nickname"
-              //defaultValue="@peduarte"
-              className="col-span-3 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-            />
-            <p className="col-span-4 col-start-2 text-xs text-white">
-              This field is optional...!
-            </p>
+          <div className="grid gap-2">
+            <div className="flex items-center">
+              <Label htmlFor="password">Username/Nickname</Label>
+            </div>
+            <Input className="bg-sky-50 text-card" />
           </div>
+
+          <Button
+            variant="outline"
+            className="w-full hover:bg-current hover:text-gray-600"
+          >
+            <User className=" h-4 w-4" />
+            Create New Account
+          </Button>
         </div>
-        <DialogFooter>
+
+        {/* <DialogFooter>
           <Button type="submit" className="bg-primary/50">
             Save changes
           </Button>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

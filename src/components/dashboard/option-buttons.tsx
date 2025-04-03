@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Trash2, UserPlus, Users } from "lucide-react";
+import { Trash2, UserPlus } from "lucide-react";
 import useVerifyAccount from "@/hooks/use-verify-account";
 import { useSession } from "next-auth/react";
 import CreateAccountModal from "./create-account-modal";
@@ -10,7 +10,7 @@ const OptionButtons = () => {
   const { verified, isLoading } = useVerifyAccount(
     userData?.user.walletAddress as string
   );
-
+  console.log(verified);
   return (
     <div className="md:place-self-end md:col-span-2">
       <div className="flex w-full gap-5 ">
@@ -26,8 +26,11 @@ const OptionButtons = () => {
             </Button>
           </>
         )}
-
-        <CreateAccountModal />
+        {!verified && !isLoading && (
+          <CreateAccountModal
+            address={userData?.user.walletAddress as string}
+          />
+        )}
       </div>
     </div>
   );
