@@ -9,7 +9,7 @@ const FriendBubble = () => {
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex flex-col w-full max-w-[320px] leading-1.5">
-        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse ">
           <span className="text-sm font-semibold">Bonnie Green</span>
           <span className="text-sm font-normal ml-auto">
             {" "}
@@ -18,14 +18,10 @@ const FriendBubble = () => {
             <span className="text-xs">Nov 2020</span>
           </span>
         </div>
-        <p className="text-sm font-normal py-2 dark:text-white truncate">
-          {" "}
-          That's awesome. I think our users will really appreciate the gestures
+        <p className="text-sm font-normal py-2 dark:text-white truncate max-w-[260px]">
+          Thats awesome. I think our users will really appreciate the gestures
           given
         </p>
-        {/* <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-          Delivered
-        </span> */}
       </div>
     </div>
   );
