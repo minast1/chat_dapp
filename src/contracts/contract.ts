@@ -1,5 +1,5 @@
 export const wagmiContractConfig = {
-  address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
   abi: [
     {
       type: "constructor",
@@ -12,17 +12,11 @@ export const wagmiContractConfig = {
       type: "function",
       name: "addFriend",
       inputs: [
-        { name: "friendAddress", type: "address", internalType: "address" },
-        { name: "_nickname", type: "bytes32", internalType: "bytes32" },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "addFriend",
-      inputs: [
-        { name: "friendAddress", type: "address", internalType: "address" },
+        {
+          name: "_friendAddress",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
       outputs: [],
       stateMutability: "nonpayable",
@@ -30,7 +24,7 @@ export const wagmiContractConfig = {
     {
       type: "function",
       name: "createAccount",
-      inputs: [{ name: "name", type: "bytes32", internalType: "bytes32" }],
+      inputs: [{ name: "name", type: "string", internalType: "string" }],
       outputs: [],
       stateMutability: "nonpayable",
     },
@@ -58,14 +52,14 @@ export const wagmiContractConfig = {
     {
       type: "function",
       name: "getChatRoomUsers",
-      inputs: [{ name: "roomId", type: "bytes32", internalType: "bytes32" }],
+      inputs: [{ name: "_roomId", type: "string", internalType: "string" }],
       outputs: [{ name: "", type: "address[]", internalType: "address[]" }],
       stateMutability: "view",
     },
     {
       type: "function",
       name: "getMessagesByRoomId",
-      inputs: [{ name: "roomId", type: "bytes32", internalType: "bytes32" }],
+      inputs: [{ name: "_roomId", type: "string", internalType: "string" }],
       outputs: [
         {
           name: "",
@@ -76,6 +70,23 @@ export const wagmiContractConfig = {
             { name: "roomId", type: "bytes32", internalType: "bytes32" },
             { name: "sender", type: "address", internalType: "address" },
             { name: "timestamp", type: "uint256", internalType: "uint256" },
+          ],
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "getPredefinedFriends",
+      inputs: [],
+      outputs: [
+        {
+          name: "",
+          type: "tuple[]",
+          internalType: "struct Chat.GenericFriendStruct[]",
+          components: [
+            { name: "_address", type: "address", internalType: "address" },
+            { name: "_nickname", type: "string", internalType: "string" },
           ],
         },
       ],
@@ -111,7 +122,8 @@ export const wagmiContractConfig = {
           internalType: "struct Chat.FriendStruct[]",
           components: [
             { name: "_address", type: "address", internalType: "address" },
-            { name: "_nickname", type: "bytes32", internalType: "bytes32" },
+            { name: "_nickname", type: "string", internalType: "string" },
+            { name: "_timestamp", type: "uint256", internalType: "uint256" },
           ],
         },
       ],
@@ -123,7 +135,14 @@ export const wagmiContractConfig = {
       inputs: [
         { name: "userAddress", type: "address", internalType: "address" },
       ],
-      outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+      outputs: [{ name: "", type: "string", internalType: "string" }],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "getUsersLength",
+      inputs: [],
+      outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
       stateMutability: "view",
     },
     {
@@ -153,7 +172,7 @@ export const wagmiContractConfig = {
       type: "function",
       name: "sendMessage",
       inputs: [
-        { name: "roomId", type: "bytes32", internalType: "bytes32" },
+        { name: "_roomId", type: "string", internalType: "string" },
         { name: "message", type: "string", internalType: "string" },
       ],
       outputs: [],
@@ -163,7 +182,7 @@ export const wagmiContractConfig = {
       type: "function",
       name: "startChat",
       inputs: [{ name: "chatee", type: "address", internalType: "address" }],
-      outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+      outputs: [{ name: "", type: "string", internalType: "string" }],
       stateMutability: "nonpayable",
     },
     {

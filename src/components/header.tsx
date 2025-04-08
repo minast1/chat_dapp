@@ -1,12 +1,37 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import CustomConnectButton from "./custom-connect-button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useBlockNumber, useReadContract } from "wagmi";
+import useVerifyAccount from "@/hooks/use-verify-account";
+import { useSession } from "next-auth/react";
+import { wagmiContractConfig } from "@/contracts/contract";
+import { Address } from "viem";
 
 const Header = () => {
+  const session = useSession();
+  const { verified } = useVerifyAccount(
+    session.data?.user.walletAddress as string
+  );
+  //const { data: blockNumber } = useBlockNumber({ watch: true });
+  const { data: userName, refetch } = useReadContract({
+    ...wagmiContractConfig,
+    functionName: "getUserName",
+    args: [session.data?.user.walletAddress as Address],
+    query: {
+      enabled: Boolean(verified),
+    },
+  });
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [blockNumber]);
+
   return (
     <nav className=" border-gray-200">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 pb-20">
+      <div className="max-w-screen-xl flex flex-nowrap items-center justify-between mx-auto px-4 pb-20">
         <CustomConnectButton />
-        <div className="flex-1" />
+        {/* <div className="flex-1" /> */}
         <button
           data-collapse-toggle="navbar-default"
           type="button"
@@ -76,6 +101,15 @@ const Header = () => {
             </li>
           </ul>
         </div>
+        {userName && (
+          <div className="md:flex items-center gap-2 hidden">
+            <Avatar className="size-9 bg-gray-200">
+              <AvatarImage src="/avatar.jpeg" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <p className="text-primary font-semibold">{userName}</p>
+          </div>
+        )}
       </div>
     </nav>
   );

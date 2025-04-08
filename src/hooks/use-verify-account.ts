@@ -1,5 +1,5 @@
 import { wagmiContractConfig } from "@/contracts/contract";
-import React from "react";
+import React, { useEffect } from "react";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
 

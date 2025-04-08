@@ -5,6 +5,7 @@ import { Providers } from "./providers/providers";
 import { headers } from "next/headers";
 import { auth } from "../../auth";
 import { Session } from "next-auth";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default async function AuthLayout({
       >
         <Providers session={session} cookie={cookie}>
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>
