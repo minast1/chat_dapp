@@ -1,47 +1,68 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Input } from "../ui/input";
+import { simulateContract, SimulateContractErrorType } from "@wagmi/core";
+import { config } from "@/wagmi";
+import { wagmiContractConfig } from "@/contracts/contract";
+import { useQueryClient } from "@tanstack/react-query";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useSearchParams } from "next/navigation";
 //import { Info } from "lucide-react";
-//import { toast } from "sonner";
+import { toast } from "sonner";
 
 const MessageForm = () => {
+  const searchParams = useSearchParams();
+  const roomId = searchParams.get("roomId");
+
+  // const [error, setError] = React.useState<string | null>(null);
   const inputRef = useRef<HTMLFormElement>(null);
+  const queryClient = useQueryClient();
+  const { data: hash, writeContract } = useWriteContract();
+
+  const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+  const onSumbit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const message = formData.get("message") as string;
+
+    //prepare contract and send transaction
+    try {
+      await simulateContract(config, {
+        ...wagmiContractConfig,
+        functionName: "sendMessage",
+        args: [roomId as `0x${string}`, message as `0x${string}`],
+      });
+    } catch (e) {
+      const error = e as SimulateContractErrorType;
+      console.log(error.message);
+      toast.error(error.message, {
+        className: "bg-red-100 text-white",
+      });
+    }
+
+    writeContract({
+      ...wagmiContractConfig,
+      functionName: "sendMessage",
+      args: [roomId as `0x${string}`, message as `0x${string}`],
+    });
+  };
+
+  useEffect(() => {
+    if (isTransactionSuccess) {
+      queryClient.invalidateQueries();
+      //reset the form
+      inputRef.current?.reset();
+    }
+  }, [isTransactionSuccess, queryClient]);
+
   return (
     <form
       ref={inputRef}
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={onSumbit}
       className="flex items-center gap-[10px] self-center w-full"
-      //   action={async (formData: FormData) => {
-      //     const message = formData.get("message")
-
-      //     if (optimisticAction && id) {
-      //       //console.log(message)
-
-      //       optimisticAction(message as string)
-      //       try {
-      //         await sendMessage(message as string, id)
-      //         inputRef.current?.reset()
-      //         //set pending to false here
-      //       } catch (error: any) {
-      //         useChatStore.setState({ isError: true })
-      //       }
-      //     } else {
-      //       toast({
-      //         //title: "Scheduled: Catch up",
-      //         description: (
-      //           <div className="flex w-full items-start gap-2">
-      //             <Info className="text-red-100" />
-      //             <p
-      //               className="font-medium text-[#1E1E1E] dark:text-white/90"
-
-      //             >
-      //               Please Click on the New Chat button to proceed..
-      //             </p>
-      //           </div>
-      //         ),
-      //       })
-      //     }
-      //   }}
     >
       <Input
         placeholder="Type a message..."
@@ -50,10 +71,11 @@ const MessageForm = () => {
         name="message"
         className="h-[50px] w-[681px] rounded-[32px] border border-[#35353526]/15 bg-gray-300 px-5 text-base font-normal leading-[28.83px] text-[#353535] shadow-2xl focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-0  dark:bg-darkBlue dark:text-white dark:focus-visible:ring-darkBlue"
       />
+
       <button
         type="submit"
         //disabled={pending}
-        className="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-primary  bg-primary/60 p-2 text-center shadow-2xl shadow-slate-900 hover:bg-primary/50 focus:outline-none focus:ring-1 dark:shadow-2xl"
+        className="inline-flex h-[40px] w-[40px] items-center justify-center rounded-full border border-primary  bg-primary/60 p-2 text-center shadow-2xl shadow-slate-900 hover:bg-primary/50 focus:outline-none focus:ring-1 dark:shadow-2xl"
       >
         <svg
           width="18"

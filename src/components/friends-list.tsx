@@ -64,7 +64,7 @@ const FriendsList = () => {
       args: [chatee as Address],
     });
   };
-
+  console.log({ hash, roomId });
   return (
     <div className="rounded-md bg-secondary col-span-1 2xl:py-10 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800">
       {friendsList?.map((friend, index) => (
