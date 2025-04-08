@@ -6,24 +6,20 @@ type TProps = {
   address: string;
   createdAt: number;
 };
-const FriendBubble = ({ nickname, address, createdAt }: TProps) => {
+const FriendBubble = ({ nickname, createdAt }: TProps) => {
   const dt = new Date(Number(createdAt) * 1000);
   return (
-    <div className="flex items-center w-full justify-between gap-2.5 text-white">
-      <div className="flex items-center gap-2">
-        <Avatar className="size-12 bg-gray-200">
-          <AvatarImage src="/avatar.jpeg" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <span className="text-sm font-semibold leading-1.5">{nickname}</span>
-      </div>
+    <div className="flex items-center w-full gap-3 text-white">
+      {/* <div className="flex items-center gap-2 border border-green-700"> */}
+      <Avatar className="size-12 bg-gray-200">
+        <AvatarImage src="/avatar.jpeg" alt="@shadcn" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
 
-      <div className="flex items-center leading-1.5 space-x-2 rtl:space-x-reverse">
-        <span className="text-sm font-normal ml-auto">
-          {" "}
-          <span className="text-gray-600 mr-2">since</span>
-          {"  "}
-          <span className="text-xs">{dt.toDateString()}</span>
+      <div className="flex flex-col items-start">
+        <span className="text-sm  2xl:text-lg font-semibold">{nickname}</span>
+        <span className="text-xs 2xl:text-sm text-slate-400">
+          <span className="text-slate-400 mr-2">since</span> {dt.toDateString()}
         </span>
       </div>
     </div>

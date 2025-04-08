@@ -14,7 +14,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { simulateContract, SimulateContractErrorType } from "@wagmi/core";
 import { config } from "@/wagmi";
 import { useRouter } from "next/navigation";
-import { set } from "zod";
 
 const FriendsList = () => {
   const { data: userData } = useSession();
@@ -67,13 +66,13 @@ const FriendsList = () => {
   };
 
   return (
-    <div className="rounded-md bg-secondary md:col-span-1 px-5 py-10 overflow-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800">
+    <div className="rounded-md bg-secondary col-span-1 2xl:py-10 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800">
       {friendsList?.map((friend, index) => (
         <Button
           variant={"ghost"}
           onClick={() => startConversation(friend._address)}
           key={index}
-          className="flex items-center w-full h-fit px-4 py-5 hover:bg-transparent rounded-none text-sm font-medium border-b border-gray-600 0 focus:z-10 focus:ring-1 focus:ring-transparent focus:text-white"
+          className="flex items-center w-full h-fit px-0 lg:px-4 py-5 hover:bg-transparent rounded-none text-sm font-medium border-b border-gray-600 0 focus:z-10 focus:ring-1 focus:ring-transparent focus:text-white"
         >
           <FriendBubble
             key={index}

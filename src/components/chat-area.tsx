@@ -28,12 +28,12 @@ const ChatArea = () => {
     if (isSuccess) {
       setMessages(conversation as Message[]);
     }
-  }, [isSuccess]);
-
+  }, [isSuccess, conversation]);
+  console.log(messages);
   return (
     <div className="rounded-md bg-secondary md:col-span-2 p-10 justify-between flex flex-col">
       <div
-        className="mb-5 border p-5 border-red-600 h-[650px] overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800"
+        className="mb-5 border p-5 border-red-600 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800"
         //ref={messagesEndRef}
       >
         <ChatBubble />
