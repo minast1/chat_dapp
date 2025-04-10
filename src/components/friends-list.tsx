@@ -9,7 +9,7 @@ import {
 } from "wagmi";
 import { useSession } from "next-auth/react";
 import { wagmiContractConfig } from "@/contracts/contract";
-import { Address } from "viem";
+import { Address, decodeEventLog } from "viem";
 import { useQueryClient } from "@tanstack/react-query";
 import { simulateContract, SimulateContractErrorType } from "@wagmi/core";
 import { config } from "@/wagmi";
@@ -17,28 +17,31 @@ import { useRouter } from "next/navigation";
 
 const FriendsList = () => {
   const { data: userData } = useSession();
-  const [roomId, setRoomId] = React.useState<string | null>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: hash, writeContract } = useWriteContract({
-    mutation: {
-      onSuccess(data) {
-        setRoomId(data);
-      },
-    },
-  });
+  const { data: hash, writeContract } = useWriteContract();
 
-  const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
-    hash,
-  });
+  const { isSuccess: isTransactionSuccess, data: trxReciept } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
 
   useEffect(() => {
     if (isTransactionSuccess) {
       queryClient.invalidateQueries();
+      //console.log(trxReciept.logs[0].topics[1]);
       //redirect to queryParam route
-      router.push(`/dashboard?roomId=${roomId}`);
+      const decodedLogs = trxReciept.logs.map((log) => {
+        decodeEventLog({
+          abi: wagmiContractConfig.abi,
+          ...log,
+        });
+      });
+      console.log({ undecoded: trxReciept.logs, decoded: decodedLogs });
+      //router.push(`/dashboard?roomId=${trxReciept.logs[0].topics[1]}`);
     }
-  }, [isTransactionSuccess]);
+  }, [isTransactionSuccess, queryClient, trxReciept, router]);
+
   const { data: friendsList } = useReadContract({
     ...wagmiContractConfig,
     functionName: "getUserFriends",
@@ -64,7 +67,7 @@ const FriendsList = () => {
       args: [chatee as Address],
     });
   };
-  console.log({ hash, roomId });
+
   return (
     <div className="rounded-md bg-secondary col-span-1 2xl:py-10 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-800">
       {friendsList?.map((friend, index) => (

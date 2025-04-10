@@ -39,7 +39,7 @@ const MessageForm = () => {
       const error = e as SimulateContractErrorType;
       console.log(error.message);
       toast.error(error.message, {
-        className: "bg-red-100 text-white",
+        className: "bg-red-300 text-white",
       });
     }
 

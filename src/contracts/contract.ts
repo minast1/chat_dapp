@@ -187,10 +187,30 @@ export const wagmiContractConfig = {
     },
     {
       type: "function",
+      name: "stringToBytes32",
+      inputs: [{ name: "name", type: "string", internalType: "string" }],
+      outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+      stateMutability: "pure",
+    },
+    {
+      type: "function",
       name: "transferOwnership",
       inputs: [{ name: "newOwner", type: "address", internalType: "address" }],
       outputs: [],
       stateMutability: "nonpayable",
+    },
+    {
+      type: "event",
+      name: "ChatStarted",
+      inputs: [
+        {
+          name: "_roomId",
+          type: "string",
+          indexed: true,
+          internalType: "string",
+        },
+      ],
+      anonymous: false,
     },
     {
       type: "event",
